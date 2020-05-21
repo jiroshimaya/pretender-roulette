@@ -1,0 +1,2 @@
+# PretenderRoulette
+Pretenderのサビのワンフレーズをご順をランダムに入れ替えて表示する
