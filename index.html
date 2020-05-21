@@ -69,14 +69,27 @@ $(document).on('touchend','button',event => {
 </script>
 <script>
 (()=>{
-	const w = ["君","の","運命","の","人","は","僕","じゃない"]
 	const area = $('.container');
+	area.append('<div class="row"></div>');
+	const title_area = $('<div class="col-12"></div>');
+	area.children('div').last().append(title_area);
+	title_area.append('<p>Pretenderルーレット - Goodbyeに続けて歌ってみよう</p>');
+	
+	
 	area.append('<div class="row"></div>');
 	const lyric_area = $('<div class="col-12"></div>');
 	area.children('div').last().append(lyric_area);
+	
 	const setLyric = () => {
-		const rand = shuffle(w);
-		lyric_area.html(rand.join(''));
+		const w = ["君","運命","人","僕"]
+		const pos = ["の","の","は","じゃない"]
+		const r_w = shuffle(w);
+		const r_pos = shuffle(pos);
+		let text = "";
+		for(let i=0;i<r_w.length;i++){
+			text += (r_w[i] + r_pos[i])
+		}
+		lyric_area.html('<h5>'+text+'</h5>');
 	}
 	
 	area.append('<div class="row"></div>');
@@ -84,22 +97,21 @@ $(document).on('touchend','button',event => {
 	area.children('div').last().append(btn_start_area);
 	const btnStart = $('<button class="btn btn-secondary">Start</button>');
 	btn_start_area.append(btnStart);
-	const btn_stop_area = $('<div class="col-6 col-md-2"></div>');
-	area.children('div').last().append(btn_stop_area);
-	const btnStop = $('<button class="btn btn-secondary">Stop</button>');
-	btn_stop_area.append(btnStop);
 	
 	let timer = null;
 	btnStart.click(()=>{
-		timer = setInterval(()=>{
-			setLyric();
-		},100);
-	});
-	btnStop.click(()=>{
-		clearInterval(timer);
+		if(btnStart.html()=='Start'){
+			timer = setInterval(()=>{
+				setLyric();
+			},100);
+			btnStart.html('Stop');
+		}else{
+			clearInterval(timer);
+			btnStart.html('Start');
+		}
 	});
 	
-	
+	btnStart.click();
 	
 })();
 </script>
