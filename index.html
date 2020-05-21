@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+	 <!-- jquery cdn -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- jquery ui cdn -->
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<!-- bootstrap4 cdn (jsはjqueryよりあとに読み込む)-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>PretenderRoulette</title>
+	<meta name="description" content="PretenderRoulette" />
+	<meta name="author" content="Jiro Shimaya" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+</head>
+<body>
+	<div class="container">
+	
+	</div>
+</body>
+<script>
+//JSON判定関数
+const isJSON = (arg) => {
+    arg = (typeof arg === "function") ? arg() : arg;
+    if (typeof arg  !== "string") {
+        return false;
+    }
+    try {
+    arg = (!JSON) ? eval("(" + arg + ")") : JSON.parse(arg);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+const shuffle = ([...array]) => {
+	for (let i = array.length - 1; i >= 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
+}
+const getRandomInt = max => Math.floor(Math.random()*max);
+const getRandomFromList = ary => ary[Math.floor(Math.random()*ary.length)]
+const isSmartPhone = () => {  
+	  if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {  
+	    return true;  
+	  } else {  
+	    return false;  
+	  }  
+	}  
+//ダブルタップ無効
+let lastTouch = 0;
+$(document).on('touchend','button',event => {
+	  const now = window.performance.now();
+	  if (now - lastTouch <= 500) {
+	    event.preventDefault();
+	    $(event.target).click();
+	  }
+	  lastTouch = now;	
+});
+</script>
+<script>
+(()=>{
+	const w = ["君","の","運命","の","人","は","僕","じゃない"]
+	const area = $('.container');
+	area.append('<div class="row"></div>');
+	const lyric_area = $('<div class="col-12"></div>');
+	area.children('div').last().append(lyric_area);
+	const setLyric = () => {
+		const rand = shuffle(w);
+		lyric_area.html(rand.join(''));
+	}
+	
+	area.append('<div class="row"></div>');
+	const btn_start_area = $('<div class="col-6 col-md-2"></div>');
+	area.children('div').last().append(btn_start_area);
+	const btnStart = $('<button class="btn btn-secondary">Start</button>');
+	btn_start_area.append(btnStart);
+	const btn_stop_area = $('<div class="col-6 col-md-2"></div>');
+	area.children('div').last().append(btn_stop_area);
+	const btnStop = $('<button class="btn btn-secondary">Stop</button>');
+	btn_stop_area.append(btnStop);
+	
+	let timer = null;
+	btnStart.click(()=>{
+		timer = setInterval(()=>{
+			setLyric();
+		},100);
+	});
+	btnStop.click(()=>{
+		clearInterval(timer);
+	});
+	
+	
+	
+})();
+</script>
